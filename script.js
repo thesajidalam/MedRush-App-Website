@@ -94,15 +94,19 @@ pharmacies:[
 {id:'apollo2',name:'Apollo 24|7 Pharmacy',addr:'Bandra Kurla Complex, Bandra East',rating:4.7,dist:'2.8 km',lat:19.0607,lng:72.8648,hours:'8 AM - 11 PM'}
 ],
 cart:[],
+_orders:[],
 selectedPharm:'apollo',
 _userLat:null,
 _userLng:null,
+_currentUser:null,
 
 init(){
   this.initLoader();
   this.loadSavedTheme();
   this.loadSavedCart();
+  this.loadAuth();
   this.bind();
+  this.bindAuth();
   this.renderPharmacies();
   this.renderDoctors();
   this.renderMedicines();
@@ -216,6 +220,202 @@ bind(){
   $('#successDone').onclick=()=>{this.closeAll();this.scrollTo('#hero')};
 
   $('#sosFindHospital').onclick=()=>this.findNearestHospital();
+},
+
+// AUTH SYSTEM
+bindAuth(){
+  // Account dropdown toggle
+  $('#accountBtn').onclick=(e)=>{e.stopPropagation();$('#accountWrap').classList.toggle('open')};
+  document.addEventListener('click',(e)=>{$('#accountWrap').classList.remove('open')});
+  $('#accountWrap').addEventListener('click',(e)=>e.stopPropagation());
+
+  // Auth modal
+  $('#dropdownLoginBtn').onclick=()=>this.openAuth();
+  $('#authClose').onclick=$('#authOverlay').onclick=()=>this.closeAuth();
+  $('#showSignup').onclick=()=>{$('#loginForm').style.display='none';$('#signupForm').style.display='block';$('#signupError').textContent=''};
+  $('#showLogin').onclick=()=>{$('#signupForm').style.display='none';$('#loginForm').style.display='block';$('#loginError').textContent=''};
+
+  // Login
+  $('#loginSubmit').onclick=()=>this.doLogin();
+  $('#loginPass').onkeydown=(e)=>{if(e.key==='Enter')this.doLogin()};
+
+  // Signup
+  $('#signupSubmit').onclick=()=>this.doSignup();
+  $('#signupPass2').onkeydown=(e)=>{if(e.key==='Enter')this.doSignup()};
+
+  // Profile
+  $('#dropdownProfile').onclick=()=>{this.openProfile();$('#accountWrap').classList.remove('open')};
+  $('#profileClose').onclick=$('#profileOverlay').onclick=()=>$('#profilePanel').classList.remove('open');
+  $('#profileSave').onclick=()=>this.saveProfile();
+
+  // Orders
+  $('#dropdownOrders').onclick=()=>{this.openOrders();$('#accountWrap').classList.remove('open')};
+  $('#ordersClose').onclick=$('#ordersOverlay').onclick=()=>$('#ordersPanel').classList.remove('open');
+
+  // Settings
+  $('#dropdownSettings').onclick=()=>{this.openProfile();$('#accountWrap').classList.remove('open')};
+
+  // Logout
+  $('#dropdownLogout').onclick=()=>this.doLogout();
+
+  this.updateAuthUI();
+},
+
+loadAuth(){
+  try{
+    const users=JSON.parse(localStorage.getItem('medrush_users')||'[]');
+    this._users=users;
+    const sid=localStorage.getItem('medrush_session');
+    if(sid){this._currentUser=users.find(u=>u.id===sid)||null}
+  }catch(e){this._users=[];this._currentUser=null}
+  try{this._orders=JSON.parse(localStorage.getItem('medrush_orders')||'[]')}catch(e){this._orders=[]}
+},
+
+openAuth(){
+  $('#authModal').style.display='flex';
+  $('#loginForm').style.display='block';
+  $('#signupForm').style.display='none';
+  $('#loginError').textContent='';
+  $('#signupError').textContent='';
+  $('#loginEmail').value='';$('#loginPass').value='';
+  $('#signupName').value='';$('#signupEmail').value='';$('#signupPhone').value='';$('#signupPass').value='';$('#signupPass2').value='';
+  document.body.style.overflow='hidden';
+},
+
+closeAuth(){
+  $('#authModal').style.display='none';
+  document.body.style.overflow='';
+},
+
+doSignup(){
+  const name=$('#signupName').value.trim();
+  const email=$('#signupEmail').value.trim().toLowerCase();
+  const phone=$('#signupPhone').value.trim();
+  const pass=$('#signupPass').value;
+  const pass2=$('#signupPass2').value;
+  const err=$('#signupError');
+
+  if(!name){err.textContent='Please enter your name';return}
+  if(!email||!email.includes('@')){err.textContent='Please enter a valid email';return}
+  if(!pass||pass.length<6){err.textContent='Password must be at least 6 characters';return}
+  if(pass!==pass2){err.textContent='Passwords do not match';return}
+  if(this._users.find(u=>u.email===email)){err.textContent='An account with this email already exists';return}
+
+  const user={id:'u_'+Date.now(),name,email,phone,pass,address:'',dob:'',gender:'',createdAt:Date.now()};
+  this._users.push(user);
+  localStorage.setItem('medrush_users',JSON.stringify(this._users));
+  localStorage.setItem('medrush_session',user.id);
+  this._currentUser=user;
+  this.updateAuthUI();
+  this.closeAuth();
+  this.toast('Account created! Welcome, '+name.split(' ')[0]);
+},
+
+doLogin(){
+  const email=$('#loginEmail').value.trim().toLowerCase();
+  const pass=$('#loginPass').value;
+  const err=$('#loginError');
+
+  if(!email||!email.includes('@')){err.textContent='Please enter a valid email';return}
+  if(!pass){err.textContent='Please enter your password';return}
+
+  const user=this._users.find(u=>u.email===email&&u.pass===pass);
+  if(!user){err.textContent='Invalid email or password';return}
+
+  localStorage.setItem('medrush_session',user.id);
+  this._currentUser=user;
+  this.updateAuthUI();
+  this.closeAuth();
+  this.toast('Welcome back, '+user.name.split(' ')[0]+'!');
+},
+
+doLogout(){
+  localStorage.removeItem('medrush_session');
+  this._currentUser=null;
+  this.updateAuthUI();
+  this.toast('Logged out successfully');
+  $('#accountWrap').classList.remove('open');
+},
+
+updateAuthUI(){
+  const user=this._currentUser;
+  if(user){
+    const initial=user.name.charAt(0).toUpperCase();
+    $('#accountAvatar').innerHTML=initial;
+    $('#accountAvatar').classList.add('logged-in');
+    $('#accountLabel').textContent=user.name.split(' ')[0];
+    $('#dropdownGuest').style.display='none';
+    $('#dropdownUser').style.display='block';
+    $('#dropdownAvatar').textContent=initial;
+    $('#dropdownName').textContent=user.name;
+    $('#dropdownEmail').textContent=user.email;
+  }else{
+    $('#accountAvatar').innerHTML=`<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`;
+    $('#accountAvatar').classList.remove('logged-in');
+    $('#accountLabel').textContent='Login';
+    $('#dropdownGuest').style.display='block';
+    $('#dropdownUser').style.display='none';
+  }
+},
+
+openProfile(){
+  const user=this._currentUser;
+  if(!user){this.openAuth();return}
+  $('#profilePanel').classList.add('open');
+  $('#profileAvatarLg').textContent=user.name.charAt(0).toUpperCase();
+  $('#profileName').value=user.name||'';
+  $('#profileEmail').value=user.email||'';
+  $('#profilePhone').value=user.phone||'';
+  $('#profileAddress').value=user.address||'';
+  $('#profileDob').value=user.dob||'';
+  $('#profileGender').value=user.gender||'';
+  $('#profileMsg').textContent='';$('#profileMsg').className='profile-msg';
+},
+
+saveProfile(){
+  const user=this._currentUser;
+  if(!user)return;
+  const name=$('#profileName').value.trim();
+  const email=$('#profileEmail').value.trim().toLowerCase();
+  const phone=$('#profilePhone').value.trim();
+  const address=$('#profileAddress').value.trim();
+  const dob=$('#profileDob').value;
+  const gender=$('#profileGender').value;
+  const msg=$('#profileMsg');
+
+  if(!name||!email){msg.textContent='Name and email are required';msg.className='profile-msg error';return}
+
+  if(email!==user.email&&this._users.find(u=>u.email===email)){msg.textContent='Email already in use';msg.className='profile-msg error';return}
+
+  user.name=name;user.email=email;user.phone=phone;user.address=address;user.dob=dob;user.gender=gender;
+  const idx=this._users.findIndex(u=>u.id===user.id);
+  if(idx>=0)this._users[idx]=user;
+  localStorage.setItem('medrush_users',JSON.stringify(this._users));
+  this.updateAuthUI();
+  $('#profileAvatarLg').textContent=name.charAt(0).toUpperCase();
+  msg.textContent='Profile saved!';msg.className='profile-msg success';
+  this.toast('Profile updated');
+},
+
+openOrders(){
+  if(!this._currentUser){this.openAuth();return}
+  $('#ordersPanel').classList.add('open');
+  const list=$('#ordersList');
+  const userOrders=this._orders.filter(o=>o.userId===this._currentUser.id);
+  if(!userOrders.length){
+    list.innerHTML=`<div class="orders-empty"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg><p>No orders yet</p><span>Your order history will appear here</span></div>`;
+    return;
+  }
+  list.innerHTML=userOrders.map(o=>`
+    <div class="order-card">
+      <div class="order-card-head">
+        <span class="order-code">${o.code}</span>
+        <span class="order-date">${new Date(o.date).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})}</span>
+      </div>
+      <div class="order-pharmacy">${o.pharmacy}</div>
+      <div class="order-items">${o.items.map(i=>i.name+' x'+i.qty).join(', ')}</div>
+      <div class="order-total">₹${o.total}</div>
+    </div>`).join('');
 },
 
 handleFile(file){
@@ -497,6 +697,7 @@ selectPharm(id){
 confirmOrder(){
   const ph=this.pharmacies.find(p=>p.id===this.selectedPharm);
   const code='MR-'+Date.now().toString(36).toUpperCase().slice(-4)+Math.random().toString(36).toUpperCase().slice(1,3);
+  const total=this.cart.reduce((s,c)=>s+c.price*c.qty,0);
   $('#successCode').textContent=code;
   if(ph){
     $('#successPharmacy').querySelector('h4').textContent=ph.name;
@@ -505,6 +706,12 @@ confirmOrder(){
     $('#successMaps').style.display='inline-flex';
   }else{
     $('#successMaps').style.display='none';
+  }
+  // Save order
+  if(this._currentUser){
+    const order={id:'o_'+Date.now(),userId:this._currentUser.id,code,pharmacy:ph?ph.name:'Unknown',pharmacyId:this.selectedPharm,items:this.cart.map(c=>({id:c.id,name:c.name,price:c.price,qty:c.qty})),total,date:Date.now()};
+    this._orders.push(order);
+    localStorage.setItem('medrush_orders',JSON.stringify(this._orders));
   }
   $('#checkoutModal').style.display='none';
   $('#successScreen').style.display='flex';
