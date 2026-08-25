@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#14B8A6">
+  <meta name="description" content="MedRush - AI-powered healthcare platform. Find medicines, scan prescriptions, connect with doctors.">
+  <title>MedRush | AI Healthcare Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- LOADER -->
+  <div class="loader" id="loader">
+    <div class="loader-inner">
+      <div class="loader-logo-wrap">
+        <img src="image/logo.png" alt="MedRush" class="loader-logo">
+        <div class="loader-ring lr1"></div>
+        <div class="loader-ring lr2"></div>
+        <div class="loader-ring lr3"></div>
+      </div>
+      <h2 class="loader-brand">MedRush</h2>
+      <div class="loader-bar"><div class="loader-fill" id="loaderFill"></div></div>
+      <p class="loader-text" id="loaderText">Initializing Healthcare...</p>
+    </div>
+  </div>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner">
+      <a href="#hero" class="nav-logo">
+        <img src="image/logo.png" alt="MedRush" class="nav-logo-img">
+        <span class="nav-brand">MedRush</span>
+      </a>
+      <div class="nav-links" id="navLinks">
+        <a href="#features" class="nav-link">Features</a>
+        <a href="#how" class="nav-link">How It Works</a>
+        <a href="#upload" class="nav-link">Upload Rx</a>
+        <a href="#medicines" class="nav-link">Medicines</a>
+        <a href="#pharmacies" class="nav-link">Pharmacies</a>
+        <a href="#doctors" class="nav-link">Doctors</a>
+        <a href="#hospitals" class="nav-link">Hospitals</a>
+      </div>
+      <div class="nav-actions">
+        <button class="theme-btn" id="themeBtn" aria-label="Toggle theme">
+          <svg class="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          <svg class="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+        <button class="cart-btn" id="cartToggle" aria-label="Cart">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
+          <span class="cart-count" id="cartCount">0</span>
+        </button>
+        <button class="hamburger" id="hamburger" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-bg">
+      <div class="hero-orb orb-1"></div>
+      <div class="hero-orb orb-2"></div>
+      <div class="hero-orb orb-3"></div>
+      <div class="hero-grid"></div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-badge">AI-Powered Healthcare</div>
+      <h1 class="hero-title">Medicine.<br><span class="gradient-text">Delivered Fast.</span><br>When It Matters.</h1>
+      <p class="hero-sub">Scan prescriptions with AI, find nearby pharmacies, reserve medicines in minutes. The future of healthcare access.</p>
+      <div class="hero-actions">
+        <a href="#upload" class="btn btn-glow">Upload Prescription</a>
+        <a href="#medicines" class="btn btn-outline">Browse Medicines</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><span class="stat-num" data-count="50">0</span><span class="stat-label">Pharmacies</span></div>
+        <div class="stat"><span class="stat-num" data-count="200">0</span><span class="stat-label">Medicines</span></div>
+        <div class="stat"><span class="stat-num" data-count="50">0</span><span class="stat-label">Doctors</span></div>
+      </div>
+      <!-- SOS Panel on Home Screen -->
+      <div class="sos-panel">
+        <div class="sos-header">
+          <div class="sos-pulse"></div>
+          <h3>Emergency SOS</h3>
+        </div>
+        <div class="sos-grid">
+          <a href="tel:108" class="sos-btn">
+            <div class="sos-btn-icon">&#128657;</div>
+            <div class="sos-btn-text">Ambulance<small>Call 108</small></div>
+          </a>
+          <a href="tel:100" class="sos-btn">
+            <div class="sos-btn-icon">&#128674;</div>
+            <div class="sos-btn-text">Police<small>Call 100</small></div>
+          </a>
+          <a href="tel:112" class="sos-btn">
+            <div class="sos-btn-icon">&#9889;</div>
+            <div class="sos-btn-text">Emergency<small>Call 112</small></div>
+          </a>
+          <a href="tel:1066" class="sos-btn">
+            <div class="sos-btn-icon">&#9762;</div>
+            <div class="sos-btn-text">Poison Help<small>Call 1066</small></div>
+          </a>
+          <button class="sos-find" id="sosFindHospital">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Find Nearest Hospital &amp; Navigate
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="phone-mockup">
+        <div class="phone-screen">
+          <div class="mock-header">
+            <img src="image/logo.png" alt="" class="mock-logo">
+            <span>MedRush</span>
+          </div>
+          <div class="mock-card mock-emergency">
+            <div class="mock-icon">&#9889;</div>
+            <div><strong>Emergency Help</strong><br><small>Get immediate assistance</small></div>
+          </div>
+          <div class="mock-grid">
+            <div class="mock-mini"><div class="mock-dot blue"></div>Upload Rx</div>
+            <div class="mock-mini"><div class="mock-dot green"></div>Find Doctors</div>
+            <div class="mock-mini"><div class="mock-dot purple"></div>My Cart</div>
+          </div>
+          <div class="mock-card mock-pharmacy">
+            <div class="mock-dot green" style="width:40px;height:40px;border-radius:10px;"></div>
+            <div><strong>Apollo Pharmacy</strong><br><small>0.8 km away</small></div>
+          </div>
+          <div class="mock-card mock-pharmacy">
+            <div class="mock-dot blue" style="width:40px;height:40px;border-radius:10px;"></div>
+            <div><strong>MedPlus</strong><br><small>1.2 km away</small></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="features" id="features">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-tag">Features</span>
+        <h2 class="section-title">Healthcare, <span class="gradient-text">Reimagined</span></h2>
+        <p class="section-sub">Everything you need to manage your health, powered by cutting-edge AI.</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon cyan"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
+          <h3>AI Prescription Scan</h3>
+          <p>Upload a photo of your prescription. Our AI extracts medicine names, dosages, and finds them at nearby pharmacies instantly.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon violet"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+          <h3>Smart Medicine Search</h3>
+          <p>Search from hundreds of medicines with real-time availability, pricing, and delivery estimates from pharmacies near you.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon green"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+          <h3>Find Doctors</h3>
+          <p>Connect with verified doctors across specialties. View ratings, availability, and navigate to them via Google Maps.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon red"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></div>
+          <h3>Emergency Assist</h3>
+          <p>One-tap emergency assistance. Call 108 or navigate to the nearest hospital instantly.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon orange"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2z"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg></div>
+          <h3>Reserve & Pickup</h3>
+          <p>Reserve medicines online and pick them up at your nearest pharmacy. No waiting, no uncertainty.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon pink"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+          <h3>Secure & Private</h3>
+          <p>Your health data is encrypted end-to-end. We never share your information with third parties.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how-section" id="how">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-tag">Process</span>
+        <h2 class="section-title">How It <span class="gradient-text">Works</span></h2>
+        <p class="section-sub">Get your medicines in 4 simple steps.</p>
+      </div>
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-num">01</div>
+          <h3>Upload Prescription</h3>
+          <p>Take a photo or upload your prescription image.</p>
+        </div>
+        <div class="step-connector"><svg width="40" height="20" viewBox="0 0 40 20"><path d="M0 10h32m-6-6l6 6-6 6" stroke="currentColor" stroke-width="2" fill="none" opacity=".3"/></svg></div>
+        <div class="step-card">
+          <div class="step-num">02</div>
+          <h3>AI Scans & Extracts</h3>
+          <p>Our AI reads and identifies all medicines instantly.</p>
+        </div>
+        <div class="step-connector"><svg width="40" height="20" viewBox="0 0 40 20"><path d="M0 10h32m-6-6l6 6-6 6" stroke="currentColor" stroke-width="2" fill="none" opacity=".3"/></svg></div>
+        <div class="step-card">
+          <div class="step-num">03</div>
+          <h3>Find Pharmacy</h3>
+          <p>Compare prices at nearby pharmacies and navigate.</p>
+        </div>
+        <div class="step-connector"><svg width="40" height="20" viewBox="0 0 40 20"><path d="M0 10h32m-6-6l6 6-6 6" stroke="currentColor" stroke-width="2" fill="none" opacity=".3"/></svg></div>
+        <div class="step-card">
+          <div class="step-num">04</div>
+          <h3>Reserve & Pickup</h3>
+          <p>Reserve and collect in minutes.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- UPLOAD RX -->
+  <section class="upload-section" id="upload">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-tag">AI Scan</span>
+        <h2 class="section-title">Upload Your <span class="gradient-text">Prescription</span></h2>
+        <p class="section-sub">Take a photo or upload an image. Our AI uses Tesseract OCR to extract all medicines in seconds.</p>
+      </div>
+      <div class="upload-area" id="uploadArea">
+        <div class="upload-zone" id="uploadZone">
+          <div class="upload-icon-wrap">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+          </div>
+          <h3>Drop prescription here</h3>
+          <p>or click to browse files</p>
+          <span class="upload-hint">Supports JPG, PNG, HEIC &middot; Uses Tesseract.js OCR (runs in browser)</span>
+          <input type="file" id="fileInput" accept="image/*" hidden>
+        </div>
+        <div class="upload-preview" id="uploadPreview" style="display:none">
+          <img id="previewImg" src="" alt="Prescription preview">
+          <div class="preview-actions">
+            <button class="btn btn-outline btn-sm" id="retakeBtn">Retake</button>
+            <button class="btn btn-glow btn-sm" id="scanBtn">Scan with AI</button>
+          </div>
+        </div>
+        <div class="scan-progress" id="scanProgress" style="display:none">
+          <div class="scan-anim">
+            <div class="scan-ring"></div>
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          </div>
+          <h3 id="scanLabel">Initializing OCR engine...</h3>
+          <div class="scan-bar"><div class="scan-bar-fill" id="scanBar"></div></div>
+          <p class="scan-sub" id="scanSub">Loading Tesseract.js worker</p>
+        </div>
+        <div class="scan-results" id="scanResults" style="display:none">
+          <div class="results-header">
+            <div class="results-check">&#10003;</div>
+            <div>
+              <h3>Scan Complete</h3>
+              <p id="resultsCount">Found 0 medicines</p>
+            </div>
+          </div>
+          <div class="results-raw" id="resultsRaw" style="display:none">
+            <h4>Extracted Text</h4>
+            <pre id="ocrText"></pre>
+          </div>
+          <div class="results-list" id="resultsList"></div>
+          <div class="results-actions">
+            <button class="btn btn-outline" id="scanAgainBtn">Scan Again</button>
+            <button class="btn btn-glow" id="addScannedBtn">Add All to Cart</button>
+          </div>
+        </div>
+      </div>
+      <div class="upload-tips">
+        <div class="tip"><span class="tip-icon">&#10003;</span> Ensure prescription is clearly visible</div>
+        <div class="tip"><span class="tip-icon">&#10003;</span> Avoid shadows and glare</div>
+        <div class="tip"><span class="tip-icon">&#10003;</span> Capture the full page</div>
+        <div class="tip"><span class="tip-icon">&#10003;</span> Handwritten prescriptions supported</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MEDICINES -->
+  <section class="medicines-section" id="medicines">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-tag">Medicines</span>
+        <h2 class="section-title">Browse <span class="gradient-text">Medicines</span></h2>
+        <p class="section-sub">Search from real medicines with actual MRP, generic names, and availability.</p>
+      </div>
+      <div class="med-controls">
+        <div class="search-wrap">
+          <svg class="search-ico" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <input type="text" class="search-field" id="medSearch" placeholder="Search medicines, generic names, brands...">
+          <button class="search-clear" id="medClear">&times;</button>
+        </div>
+        <div class="filter-row" id="filterRow">
+          <button class="filter-chip active" data-filter="all">All</button>
+          <button class="filter-chip" data-filter="tablet">Tablets</button>
+          <button class="filter-chip" data-filter="syrup">Syrups</button>
+          <button class="filter-chip" data-filter="capsule">Capsules</button>
+          <button class="filter-chip" data-filter="ointment">Ointments</button>
+          <button class="filter-chip" data-filter="drops">Drops</button>
+          <button class="filter-chip" data-filter="injection">Injections</button>
+          <button class="filter-chip" data-filter="inhaler">Inhalers</button>
+          <button class="filter-chip" data-filter="gel">Gels</button>
+        </div>
+      </div>
+      <div class="med-grid" id="medGrid"></div>
+      <div class="med-empty" id="medEmpty" style="display:none">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <h3>No medicines found</h3>
+        <p>Try a different search term or filter</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHARMACIES -->
+  <section class="pharmacies-section" id="pharmacies">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-tag">Nearby</span>
+        <h2 class="section-title">Pharmacies <span class="gradient-text">Near You</span></h2>
+        <p class="section-sub">Reserve medicines and pick them up at verified pharmacies. Navigate via Google Maps.</p>
+      </div>
+      <div class="pharm-grid" id="pharmGrid"></div>
+    </div>
+  </section>
+
+  <!-- DOCTORS -->
+  <section class="doctors-section" id="doctors">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-tag">Doctors</span>
+        <h2 class="section-title">Find <span class="gradient-text">Doctors</span></h2>
+        <p class="section-sub">Connect with verified specialists. Navigate to their clinic via Google Maps.</p>
+      </div>
+      <div class="doc-filters" id="docFilters">
+        <button class="filter-chip active" data-filter="all">All</button>
+        <button class="filter-chip" data-filter="general">General</button>
+        <button class="filter-chip" data-filter="cardio">Cardio</button>
+        <button class="filter-chip" data-filter="ortho">Ortho</button>
+        <button class="filter-chip" data-filter="pediatric">Pediatric</button>
+        <button class="filter-chip" data-filter="ent">ENT</button>
+        <button class="filter-chip" data-filter="derma">Derma</button>
+      </div>
+      <div class="doc-grid" id="docGrid"></div>
+    </div>
+  </section>
+
+  <!-- NEARBY HOSPITALS (Geolocation + Overpass) -->
+  <section class="hospitals-section" id="hospitals">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-tag">Emergency</span>
+        <h2 class="section-title">Nearby <span class="gradient-text">Hospitals</span></h2>
+        <p class="section-sub">Find hospitals near you using your location. Data from OpenStreetMap via Overpass API.</p>
+      </div>
+      <div class="hosp-grid" id="hospGrid">
+        <div class="hosp-loading" id="hospLoading">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--primary);animation:spin 1s linear infinite"><path d="M21 12a9 9 0 11-6.219-8.56"/></svg>
+          <p>Enable location access to find nearby hospitals...</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="container">
+      <div class="cta-card">
+        <div class="cta-bg"><div class="cta-orb cta-orb-1"></div><div class="cta-orb cta-orb-2"></div></div>
+        <div class="cta-content">
+          <h2>Ready to experience the future of healthcare?</h2>
+          <p>Join thousands of users who trust MedRush for fast, reliable medicine access.</p>
+          <a href="#upload" class="btn btn-glow">Get Started Free</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <img src="image/logo.png" alt="MedRush" class="footer-logo">
+          <span class="footer-name">MedRush</span>
+          <p class="footer-desc">AI-powered healthcare platform making medicine accessible to everyone.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Product</h4>
+          <a href="#features">Features</a>
+          <a href="#upload">Upload Rx</a>
+          <a href="#medicines">Medicines</a>
+          <a href="#doctors">Doctors</a>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <a href="#hero">About</a>
+          <a href="#hero">Blog</a>
+          <a href="#hero">Careers</a>
+          <a href="#hero">Contact</a>
+        </div>
+        <div class="footer-col">
+          <h4>Legal</h4>
+          <a href="#hero">Privacy Policy</a>
+          <a href="#hero">Terms of Service</a>
+          <a href="#hero">HIPAA Compliance</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 MedRush. All rights reserved.</p>
+        <p>Designed by <a href="https://github.com/thesajidalam" target="_blank" rel="noopener">@thesajidalam</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- CART PANEL -->
+  <div class="cart-panel" id="cartPanel">
+    <div class="cart-overlay" id="cartOverlay"></div>
+    <div class="cart-drawer">
+      <div class="cart-head">
+        <h3>Your Cart</h3>
+        <button class="cart-close" id="cartClose">&times;</button>
+      </div>
+      <div class="cart-items" id="cartItems"></div>
+      <div class="cart-empty" id="cartEmpty">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
+        <p>Your cart is empty</p>
+      </div>
+      <div class="cart-foot" id="cartFoot" style="display:none">
+        <div class="cart-total"><span>Total</span><span id="cartTotal">₹0</span></div>
+        <button class="btn btn-glow btn-full" id="checkoutBtn">Reserve & Checkout</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHECKOUT MODAL -->
+  <div class="checkout-modal" id="checkoutModal" style="display:none">
+    <div class="modal-overlay" id="modalOverlay"></div>
+    <div class="modal-content">
+      <button class="modal-close" id="modalClose">&times;</button>
+      <h2>Confirm Reservation</h2>
+      <div class="modal-pharmacy-select">
+        <h4>Select Pickup Pharmacy</h4>
+        <div id="modalPharmacies"></div>
+      </div>
+      <div class="modal-payment">
+        <h4>Payment Method</h4>
+        <label class="pay-option active">
+          <input type="radio" name="pay" value="store" checked>
+          <span class="pay-card">Pay at Store</span>
+        </label>
+        <label class="pay-option">
+          <input type="radio" name="pay" value="online">
+          <span class="pay-card">Pay Online (UPI/Card)</span>
+        </label>
+      </div>
+      <div class="modal-total"><span>Total</span><span id="modalTotal">₹0</span></div>
+      <button class="btn btn-glow btn-full" id="confirmOrderBtn">Confirm Reservation</button>
+    </div>
+  </div>
+
+  <!-- SUCCESS SCREEN -->
+  <div class="success-screen" id="successScreen" style="display:none">
+    <div class="success-inner">
+      <div class="success-check-anim">
+        <div class="success-circle"><svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div class="success-ring r1"></div>
+        <div class="success-ring r2"></div>
+        <div class="success-ring r3"></div>
+      </div>
+      <h2>Reservation Confirmed!</h2>
+      <p>Show this code at the pharmacy counter</p>
+      <div class="success-code" id="successCode">MR-0000</div>
+      <div class="success-pharmacy" id="successPharmacy">
+        <h4>Apollo Pharmacy</h4>
+        <p>Station Road, Andheri West</p>
+        <span class="success-ready">Ready in 15 mins</span>
+      </div>
+      <div class="success-actions">
+        <a id="successMaps" href="#" target="_blank" class="btn btn-outline">Navigate on Google Maps</a>
+        <button class="btn btn-glow" id="successDone">Back to Home</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
