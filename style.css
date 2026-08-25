@@ -208,7 +208,7 @@ button{font-family:var(--font);cursor:pointer;border:none;background:none}
 .med-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg);border-color:var(--border-2)}
 .med-img{width:60px;height:60px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .med-img svg{width:36px;height:36px}
-.med-img.tab{background:var(--primary-dim)}
+.med-img.tablet{background:var(--primary-dim)}
 .med-img.syrup{background:var(--green-dim)}
 .med-img.capsule{background:var(--accent-dim)}
 .med-img.ointment{background:var(--orange-dim)}

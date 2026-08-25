@@ -15,6 +15,8 @@ hospital:`<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg
 cart:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>`,
 location:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>`,
 };
+function esc(s){const d=document.createElement('div');d.textContent=String(s);return d.innerHTML}
+async function hashPass(p){const e=new TextEncoder();const h=await crypto.subtle.digest('SHA-256',e.encode(p+'medrush_2026'));return Array.from(new Uint8Array(h)).map(b=>b.toString(16).padStart(2,'0')).join('')}
 const M={
 medicines:[
 {id:'dolo650',name:'Dolo 650',generic:'Paracetamol 650mg',type:'tablet',mfr:'Micro Labs',price:30,orig:35,stock:'available',eta:'3 min',icon:'💊',aliases:['paracetamol','dolo','fever','temperature','acetaminophen']},
@@ -208,7 +210,7 @@ bind(){
   $('#cartClose').onclick=$('#cartOverlay').onclick=()=>this.toggleCart(false);
 
   $('#checkoutBtn').onclick=()=>this.openCheckout();
-  $('#modalClose').onclick=$('#modalOverlay').onclick=()=>$('#checkoutModal').style.display='none';
+  $('#modalClose').onclick=$('#modalOverlay').onclick=()=>{$('#checkoutModal').style.display='none';document.body.style.overflow=''};
 
   $$('.pay-option').forEach(o=>o.onclick=function(){
     $$('.pay-option').forEach(x=>x.classList.remove('active'));
@@ -224,39 +226,36 @@ bind(){
 
 // AUTH SYSTEM
 bindAuth(){
-  // Account dropdown toggle
   $('#accountBtn').onclick=(e)=>{e.stopPropagation();$('#accountWrap').classList.toggle('open')};
   document.addEventListener('click',(e)=>{$('#accountWrap').classList.remove('open')});
   $('#accountWrap').addEventListener('click',(e)=>e.stopPropagation());
 
-  // Auth modal
   $('#dropdownLoginBtn').onclick=()=>this.openAuth();
   $('#authClose').onclick=$('#authOverlay').onclick=()=>this.closeAuth();
   $('#showSignup').onclick=()=>{$('#loginForm').style.display='none';$('#signupForm').style.display='block';$('#signupError').textContent=''};
   $('#showLogin').onclick=()=>{$('#signupForm').style.display='none';$('#loginForm').style.display='block';$('#loginError').textContent=''};
-
-  // Login
   $('#loginSubmit').onclick=()=>this.doLogin();
   $('#loginPass').onkeydown=(e)=>{if(e.key==='Enter')this.doLogin()};
-
-  // Signup
   $('#signupSubmit').onclick=()=>this.doSignup();
   $('#signupPass2').onkeydown=(e)=>{if(e.key==='Enter')this.doSignup()};
 
-  // Profile
   $('#dropdownProfile').onclick=()=>{this.openProfile();$('#accountWrap').classList.remove('open')};
-  $('#profileClose').onclick=$('#profileOverlay').onclick=()=>$('#profilePanel').classList.remove('open');
+  $('#profileClose').onclick=$('#profileOverlay').onclick=()=>{$('#profilePanel').classList.remove('open');document.body.style.overflow=''};
   $('#profileSave').onclick=()=>this.saveProfile();
-
-  // Orders
   $('#dropdownOrders').onclick=()=>{this.openOrders();$('#accountWrap').classList.remove('open')};
-  $('#ordersClose').onclick=$('#ordersOverlay').onclick=()=>$('#ordersPanel').classList.remove('open');
-
-  // Settings
+  $('#ordersClose').onclick=$('#ordersOverlay').onclick=()=>{$('#ordersPanel').classList.remove('open');document.body.style.overflow=''};
   $('#dropdownSettings').onclick=()=>{this.openProfile();$('#accountWrap').classList.remove('open')};
-
-  // Logout
   $('#dropdownLogout').onclick=()=>this.doLogout();
+
+  document.addEventListener('keydown',(e)=>{
+    if(e.key==='Escape'){
+      if($('#authModal').style.display==='flex')this.closeAuth();
+      if($('#profilePanel').classList.contains('open')){$('#profilePanel').classList.remove('open');document.body.style.overflow=''}
+      if($('#ordersPanel').classList.contains('open')){$('#ordersPanel').classList.remove('open');document.body.style.overflow=''}
+      if($('#cartPanel').classList.contains('open'))this.toggleCart(false);
+      if($('#checkoutModal').style.display==='flex'){$('#checkoutModal').style.display='none';document.body.style.overflow=''}
+    }
+  });
 
   this.updateAuthUI();
 },
@@ -287,21 +286,22 @@ closeAuth(){
   document.body.style.overflow='';
 },
 
-doSignup(){
+async doSignup(){
   const name=$('#signupName').value.trim();
   const email=$('#signupEmail').value.trim().toLowerCase();
-  const phone=$('#signupPhone').value.trim();
+  const phone=$('#signupPhone').value.trim().replace(/[^0-9+\-\s]/g,'');
   const pass=$('#signupPass').value;
   const pass2=$('#signupPass2').value;
   const err=$('#signupError');
 
-  if(!name){err.textContent='Please enter your name';return}
-  if(!email||!email.includes('@')){err.textContent='Please enter a valid email';return}
-  if(!pass||pass.length<6){err.textContent='Password must be at least 6 characters';return}
+  if(!name||name.length>100){err.textContent='Please enter a valid name';return}
+  if(!email||!email.includes('@')||email.length>254){err.textContent='Please enter a valid email';return}
+  if(!pass||pass.length<6||pass.length>128){err.textContent='Password must be 6-128 characters';return}
   if(pass!==pass2){err.textContent='Passwords do not match';return}
   if(this._users.find(u=>u.email===email)){err.textContent='An account with this email already exists';return}
 
-  const user={id:'u_'+Date.now(),name,email,phone,pass,address:'',dob:'',gender:'',createdAt:Date.now()};
+  const hashed=await hashPass(pass);
+  const user={id:'u_'+Date.now(),name:name.substring(0,100),email:email.substring(0,254),phone:phone.substring(0,15),pass:hashed,address:'',dob:'',gender:'',createdAt:Date.now()};
   this._users.push(user);
   localStorage.setItem('medrush_users',JSON.stringify(this._users));
   localStorage.setItem('medrush_session',user.id);
@@ -311,7 +311,7 @@ doSignup(){
   this.toast('Account created! Welcome, '+name.split(' ')[0]);
 },
 
-doLogin(){
+async doLogin(){
   const email=$('#loginEmail').value.trim().toLowerCase();
   const pass=$('#loginPass').value;
   const err=$('#loginError');
@@ -319,7 +319,8 @@ doLogin(){
   if(!email||!email.includes('@')){err.textContent='Please enter a valid email';return}
   if(!pass){err.textContent='Please enter your password';return}
 
-  const user=this._users.find(u=>u.email===email&&u.pass===pass);
+  const hashed=await hashPass(pass);
+  const user=this._users.find(u=>u.email===email&&u.pass===hashed);
   if(!user){err.textContent='Invalid email or password';return}
 
   localStorage.setItem('medrush_session',user.id);
@@ -362,6 +363,7 @@ openProfile(){
   const user=this._currentUser;
   if(!user){this.openAuth();return}
   $('#profilePanel').classList.add('open');
+  document.body.style.overflow='hidden';
   $('#profileAvatarLg').textContent=user.name.charAt(0).toUpperCase();
   $('#profileName').value=user.name||'';
   $('#profileEmail').value=user.email||'';
@@ -375,10 +377,10 @@ openProfile(){
 saveProfile(){
   const user=this._currentUser;
   if(!user)return;
-  const name=$('#profileName').value.trim();
-  const email=$('#profileEmail').value.trim().toLowerCase();
-  const phone=$('#profilePhone').value.trim();
-  const address=$('#profileAddress').value.trim();
+  const name=$('#profileName').value.trim().substring(0,100);
+  const email=$('#profileEmail').value.trim().toLowerCase().substring(0,254);
+  const phone=$('#profilePhone').value.trim().replace(/[^0-9+\-\s]/g,'').substring(0,15);
+  const address=$('#profileAddress').value.trim().substring(0,300);
   const dob=$('#profileDob').value;
   const gender=$('#profileGender').value;
   const msg=$('#profileMsg');
@@ -400,6 +402,7 @@ saveProfile(){
 openOrders(){
   if(!this._currentUser){this.openAuth();return}
   $('#ordersPanel').classList.add('open');
+  document.body.style.overflow='hidden';
   const list=$('#ordersList');
   const userOrders=this._orders.filter(o=>o.userId===this._currentUser.id);
   if(!userOrders.length){
@@ -850,15 +853,15 @@ async fetchNearbyHospitals(lat,lng){
       <div class="hosp-card">
       <div class="hosp-icon">${ICONS.hospital}</div>
         <div class="hosp-body">
-          <div class="hosp-name">${h.name}</div>
-          <div class="hosp-addr">${h.addr||'Address not available'}</div>
+          <div class="hosp-name">${esc(h.name)}</div>
+          <div class="hosp-addr">${esc(h.addr||'Address not available')}</div>
           <div class="hosp-meta">
             <span>${h.dist} km away</span>
-            ${h.phone?`<span>📞 ${h.phone}</span>`:''}
+            ${h.phone?`<span>${esc(h.phone)}</span>`:''}
             <span class="hosp-status">Open</span>
           </div>
         </div>
-        <a href="https://www.google.com/maps/search/?api=1&query=${h.lat},${h.lng}" target="_blank" rel="noopener" class="hosp-nav-btn">
+        <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(h.lat+','+h.lng)}" target="_blank" rel="noopener" class="hosp-nav-btn">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
           Navigate
         </a>
@@ -890,7 +893,7 @@ loadDefaultHospitals(){
   const grid=$('#hospGrid');
   grid.innerHTML=defaults.map(h=>`
     <div class="hosp-card">
-      <div class="hosp-icon">🏥</div>
+      <div class="hosp-icon">${ICONS.hospital}</div>
       <div class="hosp-body">
         <div class="hosp-name">${h.name}</div>
         <div class="hosp-addr">${h.addr}</div>
