@@ -1,5 +1,20 @@
 const $=s=>document.querySelector(s);
 const $$=s=>document.querySelectorAll(s);
+const ICONS={
+tablet:`<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="8" y="14" width="32" height="20" rx="10" fill="currentColor" opacity=".15"/><rect x="10" y="16" width="28" height="16" rx="8" stroke="currentColor" stroke-width="2.5"/><line x1="24" y1="16" x2="24" y2="32" stroke="currentColor" stroke-width="2" stroke-dasharray="3 2"/></svg>`,
+capsule:`<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="10" y="8" width="28" height="32" rx="14" fill="currentColor" opacity=".1"/><rect x="12" y="10" width="24" height="28" rx="12" stroke="currentColor" stroke-width="2.5"/><path d="M12 24h24" stroke="currentColor" stroke-width="2"/><path d="M24 10v28" stroke="currentColor" stroke-width="2" opacity=".4"/></svg>`,
+syrup:`<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="14" y="4" width="20" height="8" rx="3" stroke="currentColor" stroke-width="2.5"/><rect x="12" y="12" width="24" height="30" rx="5" fill="currentColor" opacity=".12"/><rect x="14" y="14" width="20" height="26" rx="4" stroke="currentColor" stroke-width="2.5"/><path d="M14 34c0 0 4-4 10-4s10 4 10 4" stroke="currentColor" stroke-width="2" opacity=".4"/><circle cx="20" cy="24" r="2" fill="currentColor" opacity=".3"/><circle cx="28" cy="22" r="1.5" fill="currentColor" opacity=".3"/></svg>`,
+ointment:`<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="8" y="22" width="32" height="18" rx="4" fill="currentColor" opacity=".12"/><rect x="10" y="24" width="28" height="14" rx="3" stroke="currentColor" stroke-width="2.5"/><rect x="16" y="10" width="16" height="14" rx="3" stroke="currentColor" stroke-width="2.5"/><path d="M16 17h16" stroke="currentColor" stroke-width="2" opacity=".3"/><path d="M24 10v14" stroke="currentColor" stroke-width="2" opacity=".3"/></svg>`,
+drops:`<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M24 6C24 6 12 22 12 30a12 12 0 0024 0C36 22 24 6 24 6z" fill="currentColor" opacity=".12"/><path d="M24 6C24 6 12 22 12 30a12 12 0 0024 0C36 22 24 6 24 6z" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M18 32a6 6 0 006 6" stroke="currentColor" stroke-width="2" opacity=".4" stroke-linecap="round"/></svg>`,
+injection:`<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="18" y="2" width="12" height="6" rx="2" stroke="currentColor" stroke-width="2.5"/><rect x="16" y="8" width="16" height="28" rx="3" fill="currentColor" opacity=".1"/><rect x="18" y="10" width="12" height="24" rx="2" stroke="currentColor" stroke-width="2.5"/><line x1="24" y1="36" x2="24" y2="46" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path d="M20 16h8M20 22h8M20 28h8" stroke="currentColor" stroke-width="1.5" opacity=".35"/></svg>`,
+inhaler:`<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="10" y="14" width="20" height="28" rx="4" fill="currentColor" opacity=".12"/><rect x="12" y="16" width="16" height="24" rx="3" stroke="currentColor" stroke-width="2.5"/><rect x="28" y="20" width="14" height="10" rx="5" stroke="currentColor" stroke-width="2.5"/><rect x="16" y="6" width="8" height="10" rx="2" stroke="currentColor" stroke-width="2.5"/><path d="M30 25h8" stroke="currentColor" stroke-width="2" opacity=".3"/></svg>`,
+gel:`<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="8" y="24" width="32" height="16" rx="5" fill="currentColor" opacity=".12"/><rect x="10" y="26" width="28" height="12" rx="4" stroke="currentColor" stroke-width="2.5"/><rect x="18" y="12" width="12" height="14" rx="4" stroke="currentColor" stroke-width="2.5"/><path d="M22 32c0 0 2-3 6-3" stroke="currentColor" stroke-width="2" opacity=".4" stroke-linecap="round"/><circle cx="26" cy="30" r="1.5" fill="currentColor" opacity=".3"/></svg>`,
+pharmacy:`<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="6" y="18" width="36" height="24" rx="4" fill="currentColor" opacity=".12"/><rect x="8" y="20" width="32" height="20" rx="3" stroke="currentColor" stroke-width="2.5"/><path d="M18 10h12v10H18z" stroke="currentColor" stroke-width="2.5" fill="currentColor" opacity=".08"/><line x1="24" y1="26" x2="24" y2="36" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="19" y1="31" x2="29" y2="31" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>`,
+doctor:`<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="16" r="8" fill="currentColor" opacity=".12"/><circle cx="24" cy="16" r="8" stroke="currentColor" stroke-width="2.5"/><path d="M10 42c0-8 6-14 14-14s14 6 14 14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" fill="currentColor" opacity=".08"/><path d="M20 44l4-6 4 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+hospital:`<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="8" y="10" width="32" height="32" rx="4" fill="currentColor" opacity=".1"/><rect x="10" y="12" width="28" height="28" rx="3" stroke="currentColor" stroke-width="2.5"/><line x1="24" y1="18" x2="24" y2="34" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><line x1="16" y1="26" x2="32" y2="26" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><rect x="18" y="4" width="12" height="8" rx="2" fill="currentColor" opacity=".15" stroke="currentColor" stroke-width="2"/></svg>`,
+cart:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>`,
+location:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>`,
+};
 const M={
 medicines:[
 {id:'dolo650',name:'Dolo 650',generic:'Paracetamol 650mg',type:'tablet',mfr:'Micro Labs',price:30,orig:35,stock:'available',eta:'3 min',icon:'💊',aliases:['paracetamol','dolo','fever','temperature','acetaminophen']},
@@ -369,7 +384,7 @@ renderMedicines(search='',filter='all'){
   grid.innerHTML=list.map(m=>{
     const inCart=this.cart.find(c=>c.id===m.id);
     return `<div class="med-card">
-      <div class="med-img ${m.type}">${m.icon}</div>
+      <div class="med-img ${m.type}">${ICONS[m.type]||ICONS.tablet}</div>
       <div class="med-body">
         <div class="med-name">${m.name}</div>
         <div class="med-generic">${m.generic} &middot; ${m.mfr}</div>
@@ -506,7 +521,7 @@ closeAll(){
 renderPharmacies(){
   $('#pharmGrid').innerHTML=this.pharmacies.map(p=>`
     <div class="pharm-card">
-      <div class="pharm-icon">🏪</div>
+      <div class="pharm-icon">${ICONS.pharmacy}</div>
       <div class="pharm-body">
         <div class="pharm-name">${p.name}</div>
         <div class="pharm-addr">${p.addr}</div>
@@ -530,7 +545,7 @@ renderDoctors(filter='all'){
   $('#docGrid').innerHTML=list.map(d=>`
     <div class="doc-card">
       <div class="doc-top">
-        <div class="doc-avatar">🩺</div>
+        <div class="doc-avatar">${ICONS.doctor}</div>
         <div>
           <div class="doc-name">${d.name}</div>
           <div class="doc-spec">${d.specName}</div>
@@ -626,7 +641,7 @@ async fetchNearbyHospitals(lat,lng){
 
     grid.innerHTML=top.map(h=>`
       <div class="hosp-card">
-        <div class="hosp-icon">🏥</div>
+      <div class="hosp-icon">${ICONS.hospital}</div>
         <div class="hosp-body">
           <div class="hosp-name">${h.name}</div>
           <div class="hosp-addr">${h.addr||'Address not available'}</div>
